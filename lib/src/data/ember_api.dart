@@ -16,13 +16,13 @@ class EmberApiClient {
   // Hardcoded for purposes of the demo
   Future<Result<List<String>>> fetchTripIdsHardcoded() async {
     final DateTime now = DateTime.now();
-    final String startOfDay =
-        DateTime(now.year, now.month, now.day).toUtc().toIso8601String();
-    final String endOfDay = DateTime(now.year, now.month, now.day, 23, 59)
+    final String nowIso = now.toUtc().toIso8601String();
+    final String inOneDayIso =
+        now.add(const Duration(days: 1))
         .toUtc()
         .toIso8601String();
     final uri =
-        '${emberUrlBase}v1/quotes/?origin=13&destination=42&departure_date_from=$startOfDay&departure_date_to=$endOfDay';
+        '${emberUrlBase}v1/quotes/?origin=13&destination=42&departure_date_from=$nowIso&departure_date_to=$inOneDayIso';
 
     final tripUidsFuture =
         httpClient.get(Uri.parse(uri)).then(_validateOk).then(_extractTripUids);
