@@ -4,10 +4,14 @@ import 'package:async/async.dart';
 import 'package:ember_trip/src/data/ember_http_client.dart';
 import 'package:http/http.dart';
 
+import 'trip/trip_model.dart';
+
 class EmberApiClient {
   const EmberApiClient({required this.httpClient});
 
   final EmberHttpClient httpClient;
+
+  final String emberUrlBase = 'https://api.ember.to/';
 
   // Hardcoded for purposes of the demo
   Future<Result<List<String>>> fetchTripIdsHardcoded() async {
@@ -18,11 +22,21 @@ class EmberApiClient {
         .toUtc()
         .toIso8601String();
     final uri =
-        'https://api.ember.to/v1/quotes/?origin=13&destination=42&departure_date_from=$startOfDay&departure_date_to=$endOfDay';
+        '${emberUrlBase}v1/quotes/?origin=13&destination=42&departure_date_from=$startOfDay&departure_date_to=$endOfDay';
 
     final tripUidsFuture =
         httpClient.get(Uri.parse(uri)).then(_validateOk).then(_extractTripUids);
     return await Result.capture(tripUidsFuture);
+  }
+
+  Future<Result<TripModel>> fetchTripByUid(String uid) async {
+    final uri = '${emberUrlBase}v1/trips/$uid/?all=true';
+
+    final tripModel = httpClient
+        .get(Uri.parse(uri))
+        .then(_validateOk)
+        .then(_extractTripModel);
+    return await Result.capture(tripModel);
   }
 
   Response _validateOk(Response response) {
@@ -48,5 +62,9 @@ class EmberApiClient {
       }
     });
     return tripUids;
+  }
+
+  TripModel _extractTripModel(Response response) {
+    return TripModel.fromJson(json.decode(response.body));
   }
 }
