@@ -23,7 +23,7 @@ class TripViewModel extends ChangeNotifier {
   // Pretending to provide a selected trip (randomised for the demo)
   // from whatever previous context the user was in before the
   // TripView, likely some trip selector view
-  Future<void> selectRandomTrip() async {
+  Future<Result<TripModel>> selectRandomTrip() async {
     switch (await _tripRespository.fetchTripUids()) {
       case ValueResult<List<String>> tripUidsResult:
         final tripUids = tripUidsResult.value;
@@ -34,15 +34,17 @@ class TripViewModel extends ChangeNotifier {
             tripModel = tripModelResult.value;
             tripUid = newTripUid;
             notifyListeners();
+            return tripModelResult;
           case ErrorResult errorResult:
             // TODO do something with the error for UI purposes
-            throw errorResult.error;
+            return errorResult;
         }
 
       case ErrorResult errorResult:
         // TODO Do something with the error, look into handling this in the view as error widget
-        throw errorResult.error;
+        return errorResult;
     }
+    return ErrorResult(Exception());
   }
 
   TripHeadlineData collectHeadlineData() {

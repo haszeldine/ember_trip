@@ -21,8 +21,7 @@ class TripApp extends StatelessWidget {
       create: (context) =>
           TripViewModel(
           tripRespository: tripRespository,
-          nodeScheduleExtractor: nodeScheduleExtractor)
-        ..selectRandomTrip(),
+          nodeScheduleExtractor: nodeScheduleExtractor),
       child: MaterialApp(
         title: 'Ember Trip View',
         theme: ThemeData(
