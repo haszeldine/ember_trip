@@ -1,3 +1,4 @@
+import 'package:ember_trip/src/feature/trip/trip_headline_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,8 @@ class TripView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TripViewModel tripViewModel = context.watch<TripViewModel>();
+    final tripViewModel = context.watch<TripViewModel>();
+    final loading = tripViewModel.tripModel == null;
 
     return Scaffold(
       appBar: AppBar(
@@ -20,9 +22,15 @@ class TripView extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Column(
+        child: loading
+            ? SizedBox(
+                width: 60,
+                height: 60,
+                child: CircularProgressIndicator(),
+              )
+            : Column(
           children: <Widget>[
-            Text(tripViewModel.tripUid ?? 'None'),
+                  TripHeadlineWidget(tripViewModel.collectHeadlineData()),
           ],
         ),
       ),
