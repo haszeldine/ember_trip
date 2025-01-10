@@ -1,3 +1,4 @@
+import 'package:ember_trip/src/feature/trip/component/data/trip_headline_data.dart';
 import 'package:ember_trip/src/feature/trip/trip_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

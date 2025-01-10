@@ -1,6 +1,6 @@
 import 'package:async/async.dart';
 import 'package:ember_trip/src/data/trip/trip_model.dart';
-import 'package:ember_trip/src/feature/trip/trip_headline_widget.dart';
+import 'package:ember_trip/src/feature/trip/component/widget/trip_headline_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
