@@ -36,12 +36,10 @@ class TripViewModel extends ChangeNotifier {
             notifyListeners();
             return tripModelResult;
           case ErrorResult errorResult:
-            // TODO do something with the error for UI purposes
             return errorResult;
         }
 
       case ErrorResult errorResult:
-        // TODO Do something with the error, look into handling this in the view as error widget
         return errorResult;
     }
     return ErrorResult(Exception());
