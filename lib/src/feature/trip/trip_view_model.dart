@@ -4,6 +4,7 @@ import 'package:async/async.dart';
 import 'package:ember_trip/src/data/trip/trip_model.dart';
 import 'package:ember_trip/src/data/trip/trip_respository.dart';
 import 'package:ember_trip/src/feature/trip/component/data/trip_headline_data.dart';
+import 'package:ember_trip/src/feature/trip/component/data/node_schedule_data.dart';
 import 'package:ember_trip/src/feature/trip/node_schedule_extractor.dart';
 import 'package:flutter/widgets.dart';
 
@@ -71,19 +72,4 @@ class TripViewModel extends ChangeNotifier {
 
     return routeNodes.map(_nodeScheduleExtractor.extractDestination).toList();
   }
-}
-
-class NodeScheduleData {
-  NodeScheduleData(
-      {required this.nodeName,
-      required this.nodeNameDetail,
-      required this.scheduled,
-      this.revisedSchedule,
-      this.revisedDescriptor});
-
-  final String nodeName;
-  final String nodeNameDetail;
-  final DateTime scheduled;
-  final DateTime? revisedSchedule;
-  final String? revisedDescriptor;
 }

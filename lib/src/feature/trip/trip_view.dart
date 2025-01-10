@@ -42,23 +42,23 @@ class _TripViewState extends State<TripView> {
               AsyncSnapshot<Result<TripModel>> snapshot) {
             if (snapshot.hasData) {
               return Column(
-                    children: <Widget>[
-                      TripHeadlineWidget(tripViewModel.collectHeadlineData()),
-                    ],
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  TripHeadlineWidget(tripViewModel.collectHeadlineData()),
+                ],
               );
             } else if (snapshot.hasError) {
               return Text('Error fetching data');
             } else {
               return SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: CircularProgressIndicator(),
-                  );
+                width: 60,
+                height: 60,
+                child: CircularProgressIndicator(),
+              );
             }
           },
         ),
       ),
     );
   }
-
 }

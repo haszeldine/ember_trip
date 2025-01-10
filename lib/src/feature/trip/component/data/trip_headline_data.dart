@@ -1,4 +1,4 @@
-import 'package:ember_trip/src/feature/trip/trip_view_model.dart';
+import 'package:ember_trip/src/feature/trip/component/data/node_schedule_data.dart';
 
 class TripHeadlineData {
   TripHeadlineData({
