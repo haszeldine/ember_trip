@@ -70,6 +70,6 @@ class TripViewModel extends ChangeNotifier {
   List<NodeScheduleData> collectRouteData() {
     final List<RouteNode> routeNodes = tripModel!.route.routeNodes;
 
-    return routeNodes.map(_nodeScheduleExtractor.extractDestination).toList();
+    return routeNodes.map(_nodeScheduleExtractor.extractOrigin).toList();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:ember_trip/src/data/trip/trip_model.dart';
 import 'package:ember_trip/src/feature/trip/component/widget/trip_headline_widget.dart';
+import 'package:ember_trip/src/feature/trip/component/widget/route_list_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -45,6 +46,9 @@ class _TripViewState extends State<TripView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   TripHeadlineWidget(tripViewModel.collectHeadlineData()),
+                  Expanded(
+                    child: RouteListWidget(tripViewModel.collectRouteData()),
+                  ),
                 ],
               );
             } else if (snapshot.hasError) {
