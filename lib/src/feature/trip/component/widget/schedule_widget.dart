@@ -20,14 +20,14 @@ class ScheduleWidget extends StatelessWidget {
       children: data
           .map(
             (element) => TableRow(
-              children: _scheduleRowWidgets(element),
+              children: _scheduleRowWidgets(context, element),
             ),
           )
           .toList(),
     );
   }
 
-  List<Widget> _scheduleRowWidgets(
+  List<Widget> _scheduleRowWidgets(BuildContext context,
       final ({Widget icon, NodeScheduleData schedule}) data) {
     final revisedWidgets = data.schedule.revisedSchedule != null
         ? [
@@ -45,7 +45,10 @@ class ScheduleWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(data.schedule.nodeName),
-          Text(data.schedule.nodeNameDetail)
+          Text(data.schedule.nodeNameDetail,
+              style: DefaultTextStyle.of(context)
+                  .style
+                  .apply(fontSizeFactor: 0.8)),
         ],
       ),
       ...revisedWidgets,
