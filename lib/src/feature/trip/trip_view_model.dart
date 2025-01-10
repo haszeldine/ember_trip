@@ -19,8 +19,7 @@ class TripViewModel extends ChangeNotifier {
   final NodeScheduleExtractor _nodeScheduleExtractor;
   final _random = Random();
 
-  String? tripUid;
-  TripModel? tripModel;
+  TripModel? _tripModel;
 
   // Pretending to provide a selected trip (randomised for the demo)
   // from whatever previous context the user was in before the
@@ -33,8 +32,7 @@ class TripViewModel extends ChangeNotifier {
 
         switch (await _tripRespository.fetchTripByUid(newTripUid)) {
           case ValueResult<TripModel> tripModelResult:
-            tripModel = tripModelResult.value;
-            tripUid = newTripUid;
+            _tripModel = tripModelResult.value;
             notifyListeners();
             return tripModelResult;
           case ErrorResult errorResult:
@@ -48,7 +46,7 @@ class TripViewModel extends ChangeNotifier {
   }
 
   TripHeadlineData collectHeadlineData() {
-    final List<RouteNode> routeNodes = tripModel!.route.routeNodes;
+    final List<RouteNode> routeNodes = _tripModel!.route.routeNodes;
 
     // Already arrived at destination, or no other possible nodes left before it
     final hideNext = routeNodes[routeNodes.length - 1].arrival.actual != null ||
@@ -68,7 +66,7 @@ class TripViewModel extends ChangeNotifier {
   }
 
   List<NodeScheduleData> collectRouteData() {
-    final List<RouteNode> routeNodes = tripModel!.route.routeNodes;
+    final List<RouteNode> routeNodes = _tripModel!.route.routeNodes;
 
     return routeNodes.map(_nodeScheduleExtractor.extractOrigin).toList();
   }
