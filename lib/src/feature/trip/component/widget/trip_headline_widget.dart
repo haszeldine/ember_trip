@@ -3,38 +3,38 @@ import 'package:ember_trip/src/feature/trip/component/widget/schedule_widget.dar
 import 'package:flutter/material.dart';
 
 class TripHeadlineWidget extends StatelessWidget {
-  const TripHeadlineWidget(this.trip, {super.key});
+  const TripHeadlineWidget({required this.data, super.key});
 
-  final TripHeadlineData trip;
+  final TripHeadlineData data;
 
   @override
   Widget build(BuildContext context) {
-    final ScheduleWidget schedule = trip.next == null
-        ? ScheduleWidget([
+    final ScheduleWidget schedule = data.next == null
+        ? ScheduleWidget(data: [
             (
               icon: Text(
                 'From:',
                 textAlign: TextAlign.end,
               ),
-              schedule: trip.origin
+              schedule: data.origin
             ),
             (
               icon: Text('Dest:', textAlign: TextAlign.end),
-              schedule: trip.destination
+              schedule: data.destination
             ),
           ])
-        : ScheduleWidget([
+        : ScheduleWidget(data: [
             (
               icon: Text('From:', textAlign: TextAlign.end),
-              schedule: trip.origin
+              schedule: data.origin
             ),
             (
               icon: Text('Dest:', textAlign: TextAlign.end),
-              schedule: trip.destination
+              schedule: data.destination
             ),
             (
               icon: Text('Next:', textAlign: TextAlign.end),
-              schedule: trip.next!
+              schedule: data.next!
             ),
           ]);
 

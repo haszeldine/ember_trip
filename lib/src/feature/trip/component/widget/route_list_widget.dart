@@ -3,9 +3,9 @@ import 'package:ember_trip/src/feature/trip/component/widget/schedule_widget.dar
 import 'package:flutter/material.dart';
 
 class RouteListWidget extends StatelessWidget {
-  const RouteListWidget(this.nodeSchedules, {super.key});
+  const RouteListWidget({required this.data, super.key});
 
-  final List<NodeScheduleData> nodeSchedules;
+  final List<NodeScheduleData> data;
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +13,13 @@ class RouteListWidget extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) =>
           Card(
         child: ScheduleWidget(
+          data:
           [
-            (icon: SizedBox(), schedule: nodeSchedules[index]),
+            (icon: SizedBox(), schedule: data[index]),
           ],
         ),
       ),
-      itemCount: nodeSchedules.length,
+      itemCount: data.length,
     );
   }
 

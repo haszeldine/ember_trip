@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class ScheduleWidget extends StatelessWidget {
-  const ScheduleWidget(this.data, {super.key});
+  const ScheduleWidget({required this.data, super.key});
 
   final List<({Widget icon, NodeScheduleData schedule})> data;
 
