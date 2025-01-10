@@ -11,13 +11,31 @@ class TripHeadlineWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final ScheduleWidget schedule = trip.next == null
         ? ScheduleWidget([
-            (icon: Text('From:'), schedule: trip.origin),
-            (icon: Text('Dest:'), schedule: trip.destination),
+            (
+              icon: Text(
+                'From:',
+                textAlign: TextAlign.end,
+              ),
+              schedule: trip.origin
+            ),
+            (
+              icon: Text('Dest:', textAlign: TextAlign.end),
+              schedule: trip.destination
+            ),
           ])
         : ScheduleWidget([
-            (icon: Text('From:'), schedule: trip.origin),
-            (icon: Text('Dest:'), schedule: trip.destination),
-            (icon: Text('Next:'), schedule: trip.next!),
+            (
+              icon: Text('From:', textAlign: TextAlign.end),
+              schedule: trip.origin
+            ),
+            (
+              icon: Text('Dest:', textAlign: TextAlign.end),
+              schedule: trip.destination
+            ),
+            (
+              icon: Text('Next:', textAlign: TextAlign.end),
+              schedule: trip.next!
+            ),
           ]);
 
     return Card(
