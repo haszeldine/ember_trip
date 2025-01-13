@@ -1,4 +1,5 @@
 import 'package:ember_trip/src/data/trip/trip_model.dart';
+import 'package:ember_trip/src/feature/trip/component/data/node_context_data.dart';
 import 'package:ember_trip/src/feature/trip/component/data/node_schedule_data.dart';
 
 class NodeScheduleExtractor {
@@ -53,6 +54,19 @@ class NodeScheduleExtractor {
       revisedSchedule: revisedSchedule,
       revisedDescriptor: revisedDescriptor
     );
+  }
+
+    NodeScheduleContext extractScheduleContext(final RouteNode node) {
+    if (node.skipped) {
+      return NodeScheduleContext.skipped;
+    } else if (node.departure.actual != null) {
+      return NodeScheduleContext.previous;
+    } else if (node.arrival.actual != null) {
+      return NodeScheduleContext.current;
+    } else {
+      return NodeScheduleContext.upcoming;
+    }
+    // Ignoring the 'next' case for simplicty for now
   }
 
   bool _isTangibleDifference(final DateTime a, final DateTime b) {

@@ -18,7 +18,7 @@ class TripDataBuilder {
         location: _buildLocation(originNode.location),
         context: NodeContextData(
           nodeRouteContext: NodeRouteContext.origin,
-          nodeScheduleContext: extractScheduleContext(originNode),
+          nodeScheduleContext: _nodeScheduleExtractor.extractScheduleContext(originNode),
         ));
 
     final destinationNode = routeNodes[routeNodes.length - 1];
@@ -27,7 +27,7 @@ class TripDataBuilder {
         location: _buildLocation(destinationNode.location),
         context: NodeContextData(
           nodeRouteContext: NodeRouteContext.destination,
-          nodeScheduleContext: extractScheduleContext(originNode),
+          nodeScheduleContext: _nodeScheduleExtractor.extractScheduleContext(originNode),
         ));
 
     // Not departed origin, already terminated, or no other possible nodes left before destination
@@ -70,17 +70,17 @@ class TripDataBuilder {
 
     final originContext = NodeContextData(
       nodeRouteContext: NodeRouteContext.origin,
-      nodeScheduleContext: extractScheduleContext(originNode),
+      nodeScheduleContext: _nodeScheduleExtractor.extractScheduleContext(originNode),
     );
     final destinationContext = NodeContextData(
       nodeRouteContext: NodeRouteContext.destination,
-      nodeScheduleContext: extractScheduleContext(destinationNode),
+      nodeScheduleContext: _nodeScheduleExtractor.extractScheduleContext(destinationNode),
     );
     final intermediaryContexts = List.unmodifiable(
       intermediaryNodes.map(
         (node) => NodeContextData(
           nodeRouteContext: NodeRouteContext.intermediary,
-          nodeScheduleContext: extractScheduleContext(node),
+          nodeScheduleContext: _nodeScheduleExtractor.extractScheduleContext(node),
         ),
       ),
     );
@@ -103,19 +103,6 @@ class TripDataBuilder {
 
     return List<RouteNodeData>.unmodifiable(
         [originData, ...intermediaryData, destinationData]);
-  }
-
-  NodeScheduleContext extractScheduleContext(final RouteNode node) {
-    if (node.skipped) {
-      return NodeScheduleContext.skipped;
-    } else if (node.departure.actual != null) {
-      return NodeScheduleContext.previous;
-    } else if (node.arrival.actual != null) {
-      return NodeScheduleContext.current;
-    } else {
-      return NodeScheduleContext.upcoming;
-    }
-    // Ignoring the 'next' case for simplicty for now
   }
 
   NodeLocationData _buildLocation(final Location location) {
