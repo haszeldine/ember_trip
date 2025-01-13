@@ -1,0 +1,4 @@
+enum RouteViewMode {
+  list,
+  map,
+}

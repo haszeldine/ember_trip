@@ -1,6 +1,7 @@
 import 'package:async/async.dart';
 import 'package:ember_trip/src/data/trip/trip_model.dart';
-import 'package:ember_trip/src/feature/trip/component/widget/route_list_widget.dart';
+import 'package:ember_trip/src/feature/trip/component/widget/route_display_widget.dart';
+import 'package:ember_trip/src/feature/trip/component/widget/route_view_mode_button.dart';
 import 'package:ember_trip/src/feature/trip/component/widget/trip_headline_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,7 @@ class _TripViewState extends State<TripView> {
           tooltip: 'Select a new random trip',
           onPressed: context.read<TripViewModel>().selectRandomTrip,
         ),
+        actions: [const RouteViewModeButton()],
       ),
       body: Center(
         child: FutureBuilder<Result<TripModel>>(
@@ -47,7 +49,7 @@ class _TripViewState extends State<TripView> {
                 children: <Widget>[
                   const TripHeadlineWidget(),
                   Expanded(
-                    child: const RouteListWidget(),
+                    child: const RouteDisplayWidget(),
                   ),
                 ],
               );
