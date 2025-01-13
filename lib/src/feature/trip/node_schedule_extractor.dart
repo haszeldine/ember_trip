@@ -4,51 +4,62 @@ import 'package:ember_trip/src/feature/trip/component/data/node_schedule_data.da
 class NodeScheduleExtractor {
   const NodeScheduleExtractor();
 
-  NodeScheduleData extractOrigin(final RouteNode node) {
-    final DateTime scheduledDeparture = node.departure.scheduled;
-    final DateTime? revisedDeparture =
-        node.departure.actual ?? node.departure.estimated;
-    final String? revisedDescriptor = node.departure.actual != null
-        ? 'Dep:'
-        : node.departure.estimated != null
-            ? 'Est:'
-            : null;
+  NodeScheduleData extractDeparture(final RouteNode node) {
+    final ({String? revisedDescriptor, DateTime? revisedSchedule}) revision =
+        _determineRevisions(node.departure, 'Dep:');
     return NodeScheduleData(
         nodeName: node.location.regionName,
         nodeNameDetail: node.location.detailedName,
-        scheduled: scheduledDeparture,
-        revisedSchedule: revisedDeparture,
-        revisedDescriptor: revisedDescriptor);
+        scheduled: node.departure.scheduled,
+        revisedSchedule: revision.revisedSchedule,
+        revisedDescriptor: revision.revisedDescriptor);
   }
 
-  NodeScheduleData extractDestination(final RouteNode node) {
-    final DateTime scheduledArrival = node.arrival.scheduled;
-    final DateTime? revisedArrival =
-        node.arrival.actual ?? node.arrival.estimated;
-    final String? revisedDescriptor = node.arrival.actual != null
-        ? 'Arr:'
-        : node.arrival.estimated != null
-            ? 'Est:'
-            : null;
+  NodeScheduleData extractArrival(final RouteNode node) {
+    final ({String? revisedDescriptor, DateTime? revisedSchedule}) revision =
+        _determineRevisions(node.arrival, 'Arr:');
     return NodeScheduleData(
         nodeName: node.location.regionName,
         nodeNameDetail: node.location.detailedName,
-        scheduled: scheduledArrival,
-        revisedSchedule: revisedArrival,
-        revisedDescriptor: revisedDescriptor);
+        scheduled: node.arrival.scheduled,
+        revisedSchedule: revision.revisedSchedule,
+        revisedDescriptor: revision.revisedDescriptor);
   }
 
-  NodeScheduleData extractNext(final RouteNode node) {
-    final DateTime scheduledArrival = node.arrival.scheduled;
-    final DateTime? revisedArrival =
-        node.arrival.actual ?? node.arrival.estimated;
-    final String? revisedDescriptor =
-        node.arrival.estimated != null ? 'Est:' : null;
-    return NodeScheduleData(
-        nodeName: node.location.regionName,
-        nodeNameDetail: node.location.detailedName,
-        scheduled: scheduledArrival,
-        revisedSchedule: revisedArrival,
-        revisedDescriptor: revisedDescriptor);
+  NodeScheduleData extractIntermediary(final RouteNode node) {
+    final isStopCompleted = node.departure.actual != null;
+    return isStopCompleted ? extractDeparture(node) : extractArrival(node);
+  }
+
+  ({DateTime? revisedSchedule, String? revisedDescriptor}) _determineRevisions(
+      final NodeSchedule schedule, final String revisionCompletionLabel) {
+    final DateTime scheduled = schedule.scheduled;
+    final DateTime? estimated = schedule.estimated;
+    final DateTime? actual = schedule.actual;
+
+    final isActualRevised =
+        actual != null && _isTangibleDifference(scheduled, actual);
+    final isEstimatedRevised =
+        estimated != null && _isTangibleDifference(scheduled, estimated);
+
+    final DateTime? revisedSchedule = isActualRevised
+        ? actual
+        : isEstimatedRevised
+            ? estimated
+            : null;
+    final String? revisedDescriptor = isActualRevised
+        ? revisionCompletionLabel
+        : isEstimatedRevised
+            ? 'Est:'
+            : null;
+
+    return (
+      revisedSchedule: revisedSchedule,
+      revisedDescriptor: revisedDescriptor
+    );
+  }
+
+  bool _isTangibleDifference(final DateTime a, final DateTime b) {
+    return a.difference(b) >= const Duration(minutes: 1);
   }
 }

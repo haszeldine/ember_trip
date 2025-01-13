@@ -45,9 +45,9 @@ class _TripViewState extends State<TripView> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  TripHeadlineWidget(data: tripViewModel.collectHeadlineData()),
+                  TripHeadlineWidget(data: tripViewModel.headlineData),
                   Expanded(
-                    child: RouteListWidget(data: tripViewModel.collectRouteData()),
+                    child: RouteListWidget(data: tripViewModel.routeData),
                   ),
                 ],
               );

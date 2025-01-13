@@ -5,21 +5,23 @@ import 'package:ember_trip/src/data/trip/trip_model.dart';
 import 'package:ember_trip/src/data/trip/trip_respository.dart';
 import 'package:ember_trip/src/feature/trip/component/data/trip_headline_data.dart';
 import 'package:ember_trip/src/feature/trip/component/data/node_schedule_data.dart';
-import 'package:ember_trip/src/feature/trip/node_schedule_extractor.dart';
+import 'package:ember_trip/src/feature/trip/trip_data_builder.dart';
 import 'package:flutter/widgets.dart';
 
 class TripViewModel extends ChangeNotifier {
   TripViewModel(
       {required TripRespository tripRespository,
-      required nodeScheduleExtractor})
+      required tripDataBuilder})
       : _tripRespository = tripRespository,
-        _nodeScheduleExtractor = nodeScheduleExtractor;
+        _tripDataBuilder = tripDataBuilder;
 
   final TripRespository _tripRespository;
-  final NodeScheduleExtractor _nodeScheduleExtractor;
+  final TripDataBuilder _tripDataBuilder;
   final _random = Random();
 
   TripModel? _tripModel;
+  TripHeadlineData? _headlineData;
+  List<NodeScheduleData>? _routeData;
 
   // Pretending to provide a selected trip (randomised for the demo)
   // from whatever previous context the user was in before the
@@ -33,6 +35,8 @@ class TripViewModel extends ChangeNotifier {
         switch (await _tripRespository.fetchTripByUid(newTripUid)) {
           case ValueResult<TripModel> tripModelResult:
             _tripModel = tripModelResult.value;
+            _headlineData = _tripDataBuilder.buildHeadlineData(_tripModel!.route.routeNodes);
+            _routeData = _tripDataBuilder.buildRouteData(_tripModel!.route.routeNodes);
             notifyListeners();
             return tripModelResult;
           case ErrorResult errorResult:
@@ -45,29 +49,8 @@ class TripViewModel extends ChangeNotifier {
     return ErrorResult(Exception());
   }
 
-  TripHeadlineData collectHeadlineData() {
-    final List<RouteNode> routeNodes = _tripModel!.route.routeNodes;
+  TripHeadlineData get headlineData => _headlineData!;
 
-    // Already arrived at destination, or no other possible nodes left before it
-    final hideNext = routeNodes[routeNodes.length - 1].arrival.actual != null ||
-        routeNodes.every((node) => node.skipped || node.arrival.actual != null);
+  List<NodeScheduleData> get routeData => _routeData!;
 
-    final RouteNode? nodeNext = hideNext
-        ? null
-        : routeNodes.skip(1).firstWhere(
-            (node) => !node.skipped && (node.arrival.actual == null));
-
-    return TripHeadlineData(
-      origin: _nodeScheduleExtractor.extractOrigin(routeNodes[0]),
-      destination: _nodeScheduleExtractor
-          .extractDestination(routeNodes[routeNodes.length - 1]),
-      next: hideNext ? null : _nodeScheduleExtractor.extractNext(nodeNext!),
-    );
-  }
-
-  List<NodeScheduleData> collectRouteData() {
-    final List<RouteNode> routeNodes = _tripModel!.route.routeNodes;
-
-    return routeNodes.map(_nodeScheduleExtractor.extractOrigin).toList();
-  }
 }
