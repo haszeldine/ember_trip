@@ -9,7 +9,9 @@ class ScheduleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
+    return Padding(
+      padding: EdgeInsets.all(6.0),
+      child: Table(
       columnWidths: const <int, TableColumnWidth>{
         0: FixedColumnWidth(40),
         1: FixedColumnWidth(50),
@@ -24,6 +26,7 @@ class ScheduleWidget extends StatelessWidget {
             ),
           )
           .toList(),
+      ),
     );
   }
 
