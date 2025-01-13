@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:async/async.dart';
 import 'package:ember_trip/src/data/trip/trip_model.dart';
 import 'package:ember_trip/src/data/trip/trip_respository.dart';
+import 'package:ember_trip/src/feature/trip/component/data/route_node_data.dart';
 import 'package:ember_trip/src/feature/trip/component/data/route_view_mode.dart';
 import 'package:ember_trip/src/feature/trip/component/data/trip_headline_data.dart';
-import 'package:ember_trip/src/feature/trip/component/data/node_schedule_data.dart';
 import 'package:ember_trip/src/feature/trip/trip_data_builder.dart';
 import 'package:flutter/widgets.dart';
 
@@ -23,7 +23,7 @@ class TripViewModel extends ChangeNotifier {
   String? _tripUid;
   TripModel? _tripModel;
   TripHeadlineData? _headlineData;
-  List<NodeScheduleData>? _routeData;
+  List<RouteNodeData>? _routeData;
   RouteViewMode _routeViewMode = RouteViewMode.list;
 
   // Pretending to provide a selected trip (randomised for the demo)
@@ -57,7 +57,7 @@ class TripViewModel extends ChangeNotifier {
 
   TripHeadlineData? get headlineData => _headlineData;
 
-  List<NodeScheduleData>? get routeData => _routeData;
+  List<RouteNodeData>? get routeData => _routeData;
 
   RouteViewMode get routeViewMode => _routeViewMode;
 

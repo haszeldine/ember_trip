@@ -23,25 +23,25 @@ class TripHeadlineWidget extends StatelessWidget {
                 'From:',
                 textAlign: TextAlign.end,
               ),
-              schedule: data.origin
+              node: data.origin
             ),
             (
               icon: Text('Dest:', textAlign: TextAlign.end),
-              schedule: data.destination
+              node: data.destination
             ),
           ])
         : ScheduleWidget(data: [
             (
               icon: Text('From:', textAlign: TextAlign.end),
-              schedule: data.origin
+              node: data.origin
             ),
             (
               icon: Text('Dest:', textAlign: TextAlign.end),
-              schedule: data.destination
+              node: data.destination
             ),
             (
               icon: Text('Next:', textAlign: TextAlign.end),
-              schedule: data.next!
+              node: data.next!
             ),
           ]);
 

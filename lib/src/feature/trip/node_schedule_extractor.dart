@@ -8,8 +8,6 @@ class NodeScheduleExtractor {
     final ({String? revisedDescriptor, DateTime? revisedSchedule}) revision =
         _determineRevisions(node.departure, 'Dep:');
     return NodeScheduleData(
-        nodeName: node.location.regionName,
-        nodeNameDetail: node.location.detailedName,
         scheduled: node.departure.scheduled,
         revisedSchedule: revision.revisedSchedule,
         revisedDescriptor: revision.revisedDescriptor);
@@ -19,8 +17,6 @@ class NodeScheduleExtractor {
     final ({String? revisedDescriptor, DateTime? revisedSchedule}) revision =
         _determineRevisions(node.arrival, 'Arr:');
     return NodeScheduleData(
-        nodeName: node.location.regionName,
-        nodeNameDetail: node.location.detailedName,
         scheduled: node.arrival.scheduled,
         revisedSchedule: revision.revisedSchedule,
         revisedDescriptor: revision.revisedDescriptor);

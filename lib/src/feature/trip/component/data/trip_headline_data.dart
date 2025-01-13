@@ -1,4 +1,4 @@
-import 'package:ember_trip/src/feature/trip/component/data/node_schedule_data.dart';
+import 'package:ember_trip/src/feature/trip/component/data/route_node_data.dart';
 
 class TripHeadlineData {
   TripHeadlineData({
@@ -7,7 +7,7 @@ class TripHeadlineData {
     this.next,
   });
 
-  final NodeScheduleData origin;
-  final NodeScheduleData destination;
-  final NodeScheduleData? next;
+  final RouteNodeData origin;
+  final RouteNodeData destination;
+  final RouteNodeData? next;
 }
