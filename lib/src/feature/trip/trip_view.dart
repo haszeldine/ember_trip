@@ -25,7 +25,7 @@ class _TripViewState extends State<TripView> {
 
   @override
   Widget build(BuildContext context) {
-    final tripViewModel = context.watch<TripViewModel>();
+    context.select<TripViewModel, String?>((model) => model.tripUid);
 
     return Scaffold(
       appBar: AppBar(
@@ -33,7 +33,7 @@ class _TripViewState extends State<TripView> {
         leading: IconButton(
           icon: Icon(Icons.refresh),
           tooltip: 'Select a new random trip',
-          onPressed: tripViewModel.selectRandomTrip,
+          onPressed: context.read<TripViewModel>().selectRandomTrip,
         ),
       ),
       body: Center(
@@ -45,16 +45,16 @@ class _TripViewState extends State<TripView> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  TripHeadlineWidget(data: tripViewModel.headlineData),
+                  const TripHeadlineWidget(),
                   Expanded(
-                    child: RouteListWidget(data: tripViewModel.routeData),
+                    child: const RouteListWidget(),
                   ),
                 ],
               );
             } else if (snapshot.hasError) {
               return Text('Error fetching data');
             } else {
-              return SizedBox(
+              return const SizedBox(
                 width: 60,
                 height: 60,
                 child: CircularProgressIndicator(),

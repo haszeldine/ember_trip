@@ -19,6 +19,7 @@ class TripViewModel extends ChangeNotifier {
   final TripDataBuilder _tripDataBuilder;
   final _random = Random();
 
+  String? _tripUid;
   TripModel? _tripModel;
   TripHeadlineData? _headlineData;
   List<NodeScheduleData>? _routeData;
@@ -34,6 +35,7 @@ class TripViewModel extends ChangeNotifier {
 
         switch (await _tripRespository.fetchTripByUid(newTripUid)) {
           case ValueResult<TripModel> tripModelResult:
+            _tripUid = newTripUid;
             _tripModel = tripModelResult.value;
             _headlineData = _tripDataBuilder.buildHeadlineData(_tripModel!.route.routeNodes);
             _routeData = _tripDataBuilder.buildRouteData(_tripModel!.route.routeNodes);
@@ -49,8 +51,10 @@ class TripViewModel extends ChangeNotifier {
     return ErrorResult(Exception());
   }
 
-  TripHeadlineData get headlineData => _headlineData!;
+  String? get tripUid => _tripUid;
 
-  List<NodeScheduleData> get routeData => _routeData!;
+  TripHeadlineData? get headlineData => _headlineData;
+
+  List<NodeScheduleData>? get routeData => _routeData;
 
 }
