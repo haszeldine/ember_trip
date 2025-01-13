@@ -5,21 +5,21 @@ class NodeScheduleExtractor {
   const NodeScheduleExtractor();
 
   NodeScheduleData extractDeparture(final RouteNode node) {
-    final ({String? revisedDescriptor, DateTime? revisedSchedule}) revision =
+    final (:revisedDescriptor, :revisedSchedule) =
         _determineRevisions(node.departure, 'Dep:');
     return NodeScheduleData(
         scheduled: node.departure.scheduled,
-        revisedSchedule: revision.revisedSchedule,
-        revisedDescriptor: revision.revisedDescriptor);
+        revisedSchedule: revisedSchedule,
+        revisedDescriptor: revisedDescriptor);
   }
 
   NodeScheduleData extractArrival(final RouteNode node) {
-    final ({String? revisedDescriptor, DateTime? revisedSchedule}) revision =
+    final (:revisedDescriptor, :revisedSchedule) =
         _determineRevisions(node.arrival, 'Arr:');
     return NodeScheduleData(
         scheduled: node.arrival.scheduled,
-        revisedSchedule: revision.revisedSchedule,
-        revisedDescriptor: revision.revisedDescriptor);
+        revisedSchedule: revisedSchedule,
+        revisedDescriptor: revisedDescriptor);
   }
 
   NodeScheduleData extractIntermediary(final RouteNode node) {

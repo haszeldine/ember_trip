@@ -1,4 +1,6 @@
+import 'package:ember_trip/src/feature/trip/component/data/node_context_data.dart';
 import 'package:ember_trip/src/feature/trip/component/data/route_node_data.dart';
+import 'package:ember_trip/src/feature/trip/component/widget/node_context_style.dart';
 import 'package:ember_trip/src/feature/trip/trip_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -62,8 +64,15 @@ class _RouteMapWidgetState extends State<RouteMapWidget> {
             Position(node.location.longitude!, node.location.latitude!),
       ),
       // ignore: deprecated_member_use
-      circleColor: Color.fromARGB(255, 59, 49, 164).value,
-      circleRadius: 8.0,
+      circleColor: determineNodeColor(node.context.nodeScheduleContext).value,
+      circleRadius: switch (node.context.nodeRouteContext) {
+        NodeRouteContext.origin => 12.0,
+        NodeRouteContext.destination => 12.0,
+        NodeRouteContext.intermediary => 6.0,
+      },
     );
   }
+
+
+
 }

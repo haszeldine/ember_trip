@@ -1,4 +1,6 @@
+import 'package:ember_trip/src/feature/trip/component/data/node_context_data.dart';
 import 'package:ember_trip/src/feature/trip/component/data/route_node_data.dart';
+import 'package:ember_trip/src/feature/trip/component/widget/node_context_style.dart';
 import 'package:ember_trip/src/feature/trip/component/widget/schedule_widget.dart';
 import 'package:ember_trip/src/feature/trip/trip_view_model.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,19 @@ class RouteListWidget extends StatelessWidget {
         child: ScheduleWidget(
           data:
           [
-            (icon: SizedBox(), node: data[index]),
+            (
+              icon: Icon(
+                Icons.trip_origin,
+                color:
+                    determineNodeColor(data[index].context.nodeScheduleContext),
+                size: switch (data[index].context.nodeRouteContext) {
+                  NodeRouteContext.origin => 35,
+                  NodeRouteContext.destination => 35,
+                  NodeRouteContext.intermediary => 20,
+                },
+              ),
+              node: data[index]
+            ),
           ],
         ),
       ),

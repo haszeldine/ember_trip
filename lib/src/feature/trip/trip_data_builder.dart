@@ -1,4 +1,5 @@
 import 'package:ember_trip/src/data/trip/trip_model.dart';
+import 'package:ember_trip/src/feature/trip/component/data/node_context_data.dart';
 import 'package:ember_trip/src/feature/trip/component/data/node_location_data.dart';
 import 'package:ember_trip/src/feature/trip/component/data/route_node_data.dart';
 import 'package:ember_trip/src/feature/trip/component/data/trip_headline_data.dart';
@@ -14,20 +15,20 @@ class TripDataBuilder {
     final originNode = routeNodes[0];
     final origin = RouteNodeData(
         schedule: _nodeScheduleExtractor.extractDeparture(originNode),
-        location: NodeLocationData(
-            nodeName: originNode.location.regionName,
-            nodeNameDetail: originNode.location.detailedName,
-            latitude: originNode.location.lat,
-            longitude: originNode.location.lon));
+        location: _buildLocation(originNode.location),
+        context: NodeContextData(
+          nodeRouteContext: NodeRouteContext.origin,
+          nodeScheduleContext: extractScheduleContext(originNode),
+        ));
 
     final destinationNode = routeNodes[routeNodes.length - 1];
     final destination = RouteNodeData(
         schedule: _nodeScheduleExtractor.extractDeparture(destinationNode),
-        location: NodeLocationData(
-            nodeName: destinationNode.location.regionName,
-            nodeNameDetail: destinationNode.location.detailedName,
-            latitude: destinationNode.location.lat,
-            longitude: destinationNode.location.lon));
+        location: _buildLocation(destinationNode.location),
+        context: NodeContextData(
+          nodeRouteContext: NodeRouteContext.destination,
+          nodeScheduleContext: extractScheduleContext(originNode),
+        ));
 
     // Not departed origin, already terminated, or no other possible nodes left before destination
     final hideNext = routeNodes[0].departure.actual == null ||
@@ -42,11 +43,11 @@ class TripDataBuilder {
         ? null
         : RouteNodeData(
             schedule: _nodeScheduleExtractor.extractDeparture(nodeNext),
-            location: NodeLocationData(
-                nodeName: nodeNext.location.regionName,
-                nodeNameDetail: nodeNext.location.detailedName,
-                latitude: nodeNext.location.lat,
-                longitude: nodeNext.location.lon),
+            location: _buildLocation(nodeNext.location),
+            context: NodeContextData(
+              nodeRouteContext: NodeRouteContext.intermediary,
+              nodeScheduleContext: NodeScheduleContext.next,
+            )
           );
 
     return TripHeadlineData(
@@ -57,17 +58,72 @@ class TripDataBuilder {
   }
 
   List<RouteNodeData> buildRouteData(final List<RouteNode> routeNodes) {
-    return List.unmodifiable(
-      routeNodes.map(
-        (node) => RouteNodeData(
-          schedule: _nodeScheduleExtractor.extractIntermediary(node),
-          location: NodeLocationData(
-              nodeName: node.location.regionName,
-              nodeNameDetail: node.location.detailedName,
-              latitude: node.location.lat,
-              longitude: node.location.lon),
+    final originNode = routeNodes[0];
+    final destinationNode = routeNodes[routeNodes.length - 1];
+    final intermediaryNodes = routeNodes.sublist(0, routeNodes.length - 1);
+
+    final originSchedule = _nodeScheduleExtractor.extractDeparture(originNode);
+    final destinationSchedule =
+        _nodeScheduleExtractor.extractArrival(destinationNode);
+    final intermediarySchedules = List.unmodifiable(
+        intermediaryNodes.map(_nodeScheduleExtractor.extractIntermediary));
+
+    final originContext = NodeContextData(
+      nodeRouteContext: NodeRouteContext.origin,
+      nodeScheduleContext: extractScheduleContext(originNode),
+    );
+    final destinationContext = NodeContextData(
+      nodeRouteContext: NodeRouteContext.destination,
+      nodeScheduleContext: extractScheduleContext(destinationNode),
+    );
+    final intermediaryContexts = List.unmodifiable(
+      intermediaryNodes.map(
+        (node) => NodeContextData(
+          nodeRouteContext: NodeRouteContext.intermediary,
+          nodeScheduleContext: extractScheduleContext(node),
         ),
       ),
     );
+
+    final originData = RouteNodeData(
+        schedule: originSchedule,
+        location: _buildLocation(originNode.location),
+        context: originContext);
+    final destinationData = RouteNodeData(
+        schedule: destinationSchedule,
+        location: _buildLocation(destinationNode.location),
+        context: destinationContext);
+    final intermediaryData = List.generate(
+      intermediaryNodes.length,
+      (i) => RouteNodeData(
+          schedule: intermediarySchedules[i],
+          location: _buildLocation(intermediaryNodes[i].location),
+          context: intermediaryContexts[i]),
+    );
+
+    return List<RouteNodeData>.unmodifiable(
+        [originData, ...intermediaryData, destinationData]);
   }
+
+  NodeScheduleContext extractScheduleContext(final RouteNode node) {
+    if (node.skipped) {
+      return NodeScheduleContext.skipped;
+    } else if (node.departure.actual != null) {
+      return NodeScheduleContext.previous;
+    } else if (node.arrival.actual != null) {
+      return NodeScheduleContext.current;
+    } else {
+      return NodeScheduleContext.upcoming;
+    }
+    // Ignoring the 'next' case for simplicty for now
+  }
+
+  NodeLocationData _buildLocation(final Location location) {
+    return NodeLocationData(
+        nodeName: location.regionName,
+        nodeNameDetail: location.detailedName,
+        latitude: location.lat,
+        longitude: location.lon);
+  }
+
 }
