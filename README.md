@@ -34,3 +34,7 @@ https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank
 ## Future Work
 
 - If I were to carry on with this project with the aim of putting it in front of customers then I would likely continue on the route of the design I made at the start that is linked at the top. I'd want to dig into more visual indicators particularly around the bookable stops and whether they are a guaranteed stop from someone elses booking or still potentially being skipped as this is more unique to Ember and customers are less likely to be familiar with it.
+
+# Demo
+
+![demo2](https://github.com/user-attachments/assets/0f3e88a5-8d4e-4511-9d76-c2d424575d7f)
