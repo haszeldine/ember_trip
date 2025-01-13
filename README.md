@@ -29,7 +29,7 @@ https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank
 
 ## Testing
 
-- Only the HTTP class has any actual tests around it, however some other test files have been created with comments to explain what I would perhaps be looking for. I was keen to try a couple of widget tests too, but given the time then again I left those
+- Only the HTTP class has any actual tests around it, however some other test files have been created with comments to explain what I would perhaps be looking for. I was keen to try a couple of widget tests too, but given the time then I left them out of this demo. I would also be looking to add in some use case and integration testing. For the current level of functionality there isn't really much that the use case tests would be able to do over regular unit tests though. Integration testing would look to satisfy that the Ember API is being fetched from correctly, and the Mapbox SDK is loading properly (including the local access token that needs added to the build). I'm not familiar with how it would be done in Flutter, but I presume there would also be a way to do some load profiling within the integration tests to check that widget building is efficient enough, sensible timeouts are set for API requests, and expensive widgets like the map are being reused where possible.
 
 ## Future Work
 
